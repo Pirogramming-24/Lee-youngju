@@ -25,7 +25,7 @@
 - 학교: 숭실대학교
 - 학과: 컴퓨터학부
 - 관심 분야: 벡엔드
-- 이메일: oortmealy@gmai.com
+- 이메일: oortmealy@gmail.com
 - GitHub: [@oortmealy](https://github.com/oortmealy)
 
 ### ⭐ 나의 각오
