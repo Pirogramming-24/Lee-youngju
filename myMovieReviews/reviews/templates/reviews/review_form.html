@@ -1,0 +1,67 @@
+{% extends 'reviews/base.html' %}
+
+{% block title %}{% if is_update %}리뷰 수정{% else %}리뷰 작성{% endif %} - My Movie Reviews{% endblock %}
+
+{% block content %}
+<h2 style="margin-bottom: 20px; color: #2c3e50;">{% if is_update %}리뷰 수정{% else %}리뷰 작성{% endif %}</h2>
+
+<form method="post">
+    {% csrf_token %}
+
+    <div class="form-group">
+        <label for="title">영화 제목 *</label>
+        <input type="text" id="title" name="title" value="{% if review %}{{ review.title }}{% endif %}" required>
+    </div>
+
+    <div class="form-group">
+        <label for="director">감독 *</label>
+        <input type="text" id="director" name="director" value="{% if review %}{{ review.director }}{% endif %}" required>
+    </div>
+
+    <div class="form-group">
+        <label for="actors">주연 *</label>
+        <input type="text" id="actors" name="actors" value="{% if review %}{{ review.actors }}{% endif %}" required>
+    </div>
+
+    <div class="form-group">
+        <label for="genre">장르 *</label>
+        <select id="genre" name="genre" required>
+            <option value="">선택하세요</option>
+            {% for value, label in genre_choices %}
+            <option value="{{ value }}" {% if review and review.genre == value %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="rating">별점 *</label>
+        <select id="rating" name="rating" required>
+            <option value="">선택하세요</option>
+            {% for value, label in rating_choices %}
+            <option value="{{ value }}" {% if review and review.rating == value %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="runtime">러닝타임 (분) *</label>
+        <input type="number" id="runtime" name="runtime" value="{% if review %}{{ review.runtime }}{% endif %}" min="1" required>
+        <small style="color: #7f8c8d;">예: 120분 입력 → 2시간 0분으로 표시됩니다</small>
+    </div>
+
+    <div class="form-group">
+        <label for="release_year">개봉 연도 *</label>
+        <input type="number" id="release_year" name="release_year" value="{% if review %}{{ review.release_year }}{% endif %}" min="1900" max="2030" required>
+    </div>
+
+    <div class="form-group">
+        <label for="content">리뷰 내용 *</label>
+        <textarea id="content" name="content" required>{% if review %}{{ review.content }}{% endif %}</textarea>
+    </div>
+
+    <div style="display: flex; gap: 10px;">
+        <button type="submit" class="btn">저장</button>
+        <a href="{% if review %}{% url 'review_detail' review.pk %}{% else %}{% url 'review_list' %}{% endif %}" class="btn btn-secondary">취소</a>
+    </div>
+</form>
+{% endblock %}

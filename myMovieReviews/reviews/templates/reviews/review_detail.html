@@ -1,0 +1,42 @@
+{% extends 'reviews/base.html' %}
+
+{% block title %}{{ review.title }} - My Movie Reviews{% endblock %}
+
+{% block content %}
+<div class="detail-content">
+    <h1>{{ review.title }}</h1>
+
+    <div class="detail-info">
+        <p><strong>감독:</strong> {{ review.director }}</p>
+        <p><strong>주연:</strong> {{ review.actors }}</p>
+        <p><strong>장르:</strong> {{ review.genre }}</p>
+        <p><strong>개봉 연도:</strong> {{ review.release_year }}년</p>
+        <p><strong>러닝타임:</strong> {{ review.get_runtime_display }}</p>
+        <p>
+            <strong>별점:</strong>
+            <span class="rating">
+                {% if review.rating == 1 %}⭐
+                {% elif review.rating == 2 %}⭐⭐
+                {% elif review.rating == 3 %}⭐⭐⭐
+                {% elif review.rating == 4 %}⭐⭐⭐⭐
+                {% elif review.rating == 5 %}⭐⭐⭐⭐⭐
+                {% endif %}
+            </span>
+        </p>
+    </div>
+
+    <div class="review-content">
+        <h3 style="margin-bottom: 15px; color: #2c3e50;">리뷰 내용</h3>
+        <p>{{ review.content|linebreaks }}</p>
+    </div>
+
+    <div class="action-buttons">
+        <a href="{% url 'review_list' %}" class="btn btn-secondary">my Movie reviews</a>
+        <a href="{% url 'review_update' review.pk %}" class="btn">수정</a>
+        <form method="post" action="{% url 'review_delete' review.pk %}" style="display: inline;" onsubmit="return confirm('정말 삭제하시겠습니까?');">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">삭제</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
