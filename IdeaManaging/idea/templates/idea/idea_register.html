@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block title %}아이디어 등록{% endblock %}
+
+{% block extra_css %}
+<style>
+    .form-container {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    .form-group {
+        margin-bottom: 20px;
+    }
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+        color: #333;
+    }
+    .form-group input[type="text"],
+    .form-group input[type="number"],
+    .form-group textarea,
+    .form-group select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+    .form-group textarea {
+        min-height: 150px;
+        resize: vertical;
+    }
+    .form-group input[type="file"] {
+        padding: 5px;
+    }
+    .submit-btn {
+        width: 100%;
+        padding: 12px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+    .submit-btn:hover {
+        background-color: #0056b3;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h1>아이디어 등록</h1>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="title">제목 *</label>
+            <input type="text" id="title" name="title" required>
+        </div>
+
+        <div class="form-group">
+            <label for="image">이미지 *</label>
+            <input type="file" id="image" name="image" accept="image/*" required>
+        </div>
+
+        <div class="form-group">
+            <label for="content">내용 *</label>
+            <textarea id="content" name="content" required></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="interest">관심도</label>
+            <input type="number" id="interest" name="interest" value="0" min="0">
+        </div>
+
+        <div class="form-group">
+            <label for="devtool">개발툴 *</label>
+            <select id="devtool" name="devtool" required>
+                <option value="">-- 개발툴 선택 --</option>
+                {% for tool in devtools %}
+                <option value="{{ tool.id }}">{{ tool.name }} ({{ tool.kind }})</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <button type="submit" class="submit-btn">등록하기</button>
+        <a href="{% url 'idea:list' %}" class="btn btn-secondary" style="width: 100%; text-align: center; display: block; margin-top: 10px;">취소</a>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}아이디어 관리{% endblock %}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        /* NavBar Styles */
+        .navbar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .navbar-brand a {
+            text-decoration: none;
+            color: #667eea;
+        }
+
+        .navbar-brand h2 {
+            font-size: 24px;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .navbar-menu {
+            list-style: none;
+            display: flex;
+            gap: 10px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar-menu li {
+            margin: 0;
+        }
+
+        .navbar-menu a {
+            display: block;
+            padding: 10px 20px;
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-menu a:hover {
+            background: #f0f0f0;
+            color: #667eea;
+        }
+
+        .navbar-menu a.active {
+            background: #667eea;
+            color: white;
+        }
+
+        /* Main Content Container */
+        .main-container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .content-wrapper {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            min-height: calc(100vh - 160px);
+        }
+
+        h1, h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 30px;
+        }
+
+        /* Button Styles */
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4);
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            box-shadow: 0 4px 12px rgba(108, 117, 125, 0.4);
+        }
+
+        .btn-success {
+            background-color: #28a745;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: white;
+            font-size: 14px;
+            margin-top: 30px;
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Header Navigation -->
+    {% include 'navbar.html' %}
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <div class="content-wrapper">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>&copy; 2026 Idea Manager. All rights reserved.</p>
+    </div>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

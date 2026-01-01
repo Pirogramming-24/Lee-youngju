@@ -1,0 +1,15 @@
+<nav class="navbar">
+    <div class="navbar-container">
+        <div class="navbar-brand">
+            <a href="{% url 'idea:list' %}">
+                <h2>💡 Idea Manager</h2>
+            </a>
+        </div>
+        <ul class="navbar-menu">
+            <li><a href="{% url 'idea:list' %}" class="{% if request.resolver_match.url_name == 'list' and request.resolver_match.app_name == 'idea' %}active{% endif %}">아이디어 관리</a></li>
+            <li><a href="{% url 'idea:register' %}" class="{% if request.resolver_match.url_name == 'register' and request.resolver_match.app_name == 'idea' %}active{% endif %}">아이디어 등록</a></li>
+            <li><a href="{% url 'tool:list' %}" class="{% if request.resolver_match.url_name == 'list' and request.resolver_match.app_name == 'tool' %}active{% endif %}">개발툴 관리</a></li>
+            <li><a href="{% url 'tool:register' %}" class="{% if request.resolver_match.url_name == 'register' and request.resolver_match.app_name == 'tool' %}active{% endif %}">개발툴 등록</a></li>
+        </ul>
+    </div>
+</nav>
