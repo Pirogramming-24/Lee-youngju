@@ -18,16 +18,22 @@
     .detail-info {
         margin: 15px 0;
         padding: 15px;
-        background-color: #f8f9fa;
+        background-color: #BDE8F5;
         border-radius: 5px;
     }
     .detail-info h3 {
-        color: #007bff;
+        color: #0F2854;
         margin-bottom: 10px;
     }
     .detail-info p {
         margin: 8px 0;
         line-height: 1.6;
+        color: #000000;
+    }
+    .detail-info a {
+        color: #1C4D8D;
+        text-decoration: none;
+        font-weight: 500;
     }
     .button-group {
         margin-top: 30px;
@@ -37,7 +43,7 @@
     .star-display {
         display: inline-block;
         padding: 10px 20px;
-        background: #ffc107;
+        background: #BDE8F5;
         border-radius: 5px;
         font-size: 20px;
         margin: 15px 0;
@@ -46,17 +52,15 @@
         padding: 10px 20px;
         font-size: 16px;
         cursor: pointer;
-        border: 2px solid #ffc107;
+        border: none;
         background: white;
+        color: #1C4D8D;
+        font-weight: 500;
         border-radius: 5px;
-        transition: all 0.3s;
     }
     .star-toggle-btn.starred {
-        background: #ffc107;
-        color: white;
-    }
-    .star-toggle-btn:hover {
-        transform: scale(1.05);
+        background: #1C4D8D;
+        color: #FFFFFF;
     }
 </style>
 {% endblock %}
@@ -83,9 +87,11 @@
     <div class="detail-info">
         <h3>개발 정보</h3>
         <p><strong>개발툴:</strong>
-            <a href="{% url 'tool:detail' idea.devtool.id %}" style="color: #007bff;">
-                {{ idea.devtool.name }}
-            </a>
+            {% for tool in idea.devtools.all %}
+                <a href="{% url 'tool:detail' tool.id %}" style="color: #007bff;">
+                    {{ tool.name }}
+                </a>{% if not forloop.last %}, {% endif %}
+            {% endfor %}
         </p>
         <p><strong>관심도:</strong> {{ idea.interest }}</p>
         <p><strong>등록일:</strong> {{ idea.created_at|date:"Y-m-d H:i" }}</p>

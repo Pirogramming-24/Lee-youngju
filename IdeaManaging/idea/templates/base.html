@@ -11,18 +11,33 @@
             box-sizing: border-box;
         }
 
+        html {
+            overflow-y: scroll;
+            overflow-x: hidden;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #4988C4 0%, #BDE8F5 100%) fixed;
             min-height: 100vh;
+            padding-top: 70px;
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+            overflow-x: hidden;
+            position: relative;
         }
 
         /* NavBar Styles */
         .navbar {
-            background: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            position: sticky;
+            background: #0F2854;
+            position: fixed;
             top: 0;
+            left: 0;
+            right: 0;
             z-index: 1000;
         }
 
@@ -38,13 +53,14 @@
 
         .navbar-brand a {
             text-decoration: none;
-            color: #667eea;
+            color: #FFFFFF;
         }
 
         .navbar-brand h2 {
             font-size: 24px;
             font-weight: 700;
             margin: 0;
+            color: #FFFFFF;
         }
 
         .navbar-menu {
@@ -62,21 +78,15 @@
         .navbar-menu a {
             display: block;
             padding: 10px 20px;
-            color: #333;
+            color: #FFFFFF;
             text-decoration: none;
             font-weight: 500;
             border-radius: 5px;
-            transition: all 0.3s ease;
-        }
-
-        .navbar-menu a:hover {
-            background: #f0f0f0;
-            color: #667eea;
         }
 
         .navbar-menu a.active {
-            background: #667eea;
-            color: white;
+            background: #4988C4;
+            color: #FFFFFF;
         }
 
         /* Main Content Container */
@@ -90,28 +100,27 @@
             background: white;
             padding: 40px;
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             min-height: calc(100vh - 160px);
-        }
-
-        h1, h2 {
-            color: #333;
-            margin-bottom: 20px;
         }
 
         h1 {
             font-size: 32px;
             font-weight: 700;
-            color: #667eea;
+            color: #0F2854;
             margin-bottom: 30px;
+        }
+
+        h2 {
+            color: #000000;
+            margin-bottom: 20px;
         }
 
         /* Button Styles */
         .btn {
             display: inline-block;
             padding: 10px 20px;
-            background-color: #667eea;
-            color: white;
+            background-color: #1C4D8D;
+            color: #FFFFFF;
             text-decoration: none;
             border-radius: 5px;
             border: none;
@@ -119,47 +128,25 @@
             font-size: 14px;
             font-weight: 500;
             margin: 5px;
-            transition: all 0.3s ease;
-        }
-
-        .btn:hover {
-            background-color: #5568d3;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
         }
 
         .btn-danger {
             background-color: #dc3545;
         }
 
-        .btn-danger:hover {
-            background-color: #c82333;
-            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4);
-        }
-
         .btn-secondary {
-            background-color: #6c757d;
-        }
-
-        .btn-secondary:hover {
-            background-color: #5a6268;
-            box-shadow: 0 4px 12px rgba(108, 117, 125, 0.4);
+            background-color: #4988C4;
         }
 
         .btn-success {
-            background-color: #28a745;
-        }
-
-        .btn-success:hover {
-            background-color: #218838;
-            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
+            background-color: #1C4D8D;
         }
 
         /* Footer */
         .footer {
             text-align: center;
             padding: 20px;
-            color: white;
+            color: #0F2854;
             font-size: 14px;
             margin-top: 30px;
         }
