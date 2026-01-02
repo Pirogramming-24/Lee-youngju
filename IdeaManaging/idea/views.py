@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.db.models import Count
+from django.core.paginator import Paginator
 from .models import Idea, IdeaStar
 from tool.models import DevTool
 
@@ -15,7 +16,7 @@ def get_user_identifier(request):
 
 def idea_list(request):
     """아이디어 리스트 페이지 (메인 페이지)"""
-    ideas = Idea.objects.annotate(star_count=Count('ideastars')).all()
+    ideas = Idea.objects.annotate(star_count=Count('ideastars')).prefetch_related('devtools').all()
 
     # 정렬 기능
     sort = request.GET.get('sort', 'latest')
@@ -28,15 +29,20 @@ def idea_list(request):
     else:  # latest (기본값)
         ideas = ideas.order_by('-created_at')
 
+    # 페이지네이션 (한 페이지에 4개씩)
+    paginator = Paginator(ideas, 4)
+    page_number = request.GET.get('page', 1)
+    page_obj = paginator.get_page(page_number)
+
     # 사용자 식별자 가져오기
     user_id = get_user_identifier(request)
 
     # 각 아이디어에 대한 찜 여부 추가
-    for idea in ideas:
+    for idea in page_obj:
         idea.is_starred = IdeaStar.objects.filter(idea=idea, user_identifier=user_id).exists()
 
     context = {
-        'ideas': ideas,
+        'page_obj': page_obj,
         'current_sort': sort,
     }
     return render(request, 'idea/idea_list.html', context)
@@ -62,17 +68,17 @@ def idea_register(request):
         image = request.FILES.get('image')
         content = request.POST.get('content')
         interest = request.POST.get('interest', 0)
-        devtool_id = request.POST.get('devtool')
-
-        devtool = get_object_or_404(DevTool, pk=devtool_id)
+        devtool_ids = request.POST.getlist('devtools')  # 여러 개 선택
 
         idea = Idea.objects.create(
             title=title,
             image=image,
             content=content,
-            interest=interest,
-            devtool=devtool
+            interest=interest
         )
+
+        # ManyToMany 관계 설정
+        idea.devtools.set(devtool_ids)
 
         return redirect('idea:detail', idea_id=idea.id)
 
@@ -91,9 +97,11 @@ def idea_update(request, idea_id):
             idea.image = request.FILES.get('image')
         idea.content = request.POST.get('content')
         idea.interest = request.POST.get('interest')
-        devtool_id = request.POST.get('devtool')
-        idea.devtool = get_object_or_404(DevTool, pk=devtool_id)
+        devtool_ids = request.POST.getlist('devtools')  # 여러 개 선택
         idea.save()
+
+        # ManyToMany 관계 업데이트
+        idea.devtools.set(devtool_ids)
 
         return redirect('idea:detail', idea_id=idea.id)
 
