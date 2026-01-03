@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ tool.name }} - 개발툴 상세{% endblock %}
+
+{% block extra_css %}
+<style>
+    .detail-container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    .detail-info {
+        margin: 15px 0;
+        padding: 15px;
+        background-color: #BDE8F5;
+        border-radius: 5px;
+    }
+    .detail-info h3 {
+        color: #0F2854;
+        margin-bottom: 10px;
+    }
+    .detail-info p {
+        margin: 8px 0;
+        line-height: 1.6;
+        color: #000000;
+    }
+    .button-group {
+        margin-top: 30px;
+        display: flex;
+        gap: 10px;
+    }
+    .related-ideas {
+        margin-top: 30px;
+        padding: 20px;
+        background-color: #BDE8F5;
+        border-radius: 5px;
+    }
+    .related-ideas h3 {
+        margin-bottom: 15px;
+        color: #0F2854;
+    }
+    .idea-list {
+        list-style: none;
+        padding: 0;
+    }
+    .idea-list li {
+        padding: 10px;
+        margin-bottom: 10px;
+        background: #FFFFFF;
+        border-radius: 5px;
+    }
+    .idea-list a {
+        color: #1C4D8D;
+        text-decoration: none;
+        font-weight: 500;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="detail-container">
+    <h1>{{ tool.name }}</h1>
+
+    <div class="detail-info">
+        <h3>개발툴 정보</h3>
+        <p><strong>이름:</strong> {{ tool.name }}</p>
+        <p><strong>종류:</strong> {{ tool.kind }}</p>
+        <p><strong>등록일:</strong> {{ tool.created_at|date:"Y-m-d H:i" }}</p>
+        <p><strong>수정일:</strong> {{ tool.updated_at|date:"Y-m-d H:i" }}</p>
+    </div>
+
+    <div class="detail-info">
+        <h3>상세 내용</h3>
+        <p>{{ tool.content }}</p>
+    </div>
+
+    <div class="related-ideas">
+        <h3>이 개발툴을 사용하는 아이디어 ({{ ideas.count }}개)</h3>
+        {% if ideas %}
+        <ul class="idea-list">
+            {% for idea in ideas %}
+            <li>
+                <a href="{% url 'idea:detail' idea.id %}">{{ idea.title }}</a>
+                <span style="color: #666; font-size: 14px; margin-left: 10px;">
+                    (관심도: {{ idea.interest }})
+                </span>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>이 개발툴을 사용하는 아이디어가 없습니다.</p>
+        {% endif %}
+    </div>
+
+    <div class="button-group">
+        <a href="{% url 'tool:list' %}" class="btn btn-secondary">목록</a>
+        <a href="{% url 'tool:update' tool.id %}" class="btn btn-success">수정</a>
+        <form method="post" action="{% url 'tool:delete' tool.id %}" style="display: inline;"
+              onsubmit="return confirm('정말 삭제하시겠습니까?');">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">삭제</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

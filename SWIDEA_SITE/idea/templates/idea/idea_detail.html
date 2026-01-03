@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ idea.title }} - 아이디어 상세{% endblock %}
+
+{% block extra_css %}
+<style>
+    .detail-container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    .idea-detail-image {
+        width: 100%;
+        max-height: 500px;
+        object-fit: cover;
+        border-radius: 10px;
+        margin-bottom: 20px;
+    }
+    .detail-info {
+        margin: 15px 0;
+        padding: 15px;
+        background-color: #BDE8F5;
+        border-radius: 5px;
+    }
+    .detail-info h3 {
+        color: #0F2854;
+        margin-bottom: 10px;
+    }
+    .detail-info p {
+        margin: 8px 0;
+        line-height: 1.6;
+        color: #000000;
+    }
+    .detail-info a {
+        color: #1C4D8D;
+        text-decoration: none;
+        font-weight: 500;
+    }
+    .button-group {
+        margin-top: 30px;
+        display: flex;
+        gap: 10px;
+    }
+    .star-display {
+        display: inline-block;
+        padding: 10px 20px;
+        background: #BDE8F5;
+        border-radius: 5px;
+        font-size: 20px;
+        margin: 15px 0;
+    }
+    .star-toggle-btn {
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        border: none;
+        background: white;
+        color: #1C4D8D;
+        font-weight: 500;
+        border-radius: 5px;
+    }
+    .star-toggle-btn.starred {
+        background: #1C4D8D;
+        color: #FFFFFF;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="detail-container">
+    <h1>{{ idea.title }}</h1>
+
+    <div class="star-display">
+        <button class="star-toggle-btn {% if is_starred %}starred{% endif %}"
+                onclick="toggleStar({{ idea.id }}, this)">
+            <span class="star-icon">{% if is_starred %}★ 찜한 아이디어{% else %}☆ 찜하기{% endif %}</span>
+        </button>
+        <span style="margin-left: 15px;">찜: <span class="star-count">{{ idea.star_count }}</span>개</span>
+    </div>
+
+    <img src="{{ idea.image.url }}" alt="{{ idea.title }}" class="idea-detail-image">
+
+    <div class="detail-info">
+        <h3>아이디어 내용</h3>
+        <p>{{ idea.content }}</p>
+    </div>
+
+    <div class="detail-info">
+        <h3>개발 정보</h3>
+        <p><strong>개발툴:</strong>
+            {% for tool in idea.devtools.all %}
+                <a href="{% url 'tool:detail' tool.id %}" style="color: #007bff;">
+                    {{ tool.name }}
+                </a>{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+        </p>
+        <p><strong>관심도:</strong> {{ idea.interest }}</p>
+        <p><strong>등록일:</strong> {{ idea.created_at|date:"Y-m-d H:i" }}</p>
+        <p><strong>수정일:</strong> {{ idea.updated_at|date:"Y-m-d H:i" }}</p>
+    </div>
+
+    <div class="button-group">
+        <a href="{% url 'idea:list' %}" class="btn btn-secondary">목록</a>
+        <a href="{% url 'idea:update' idea.id %}" class="btn btn-success">수정</a>
+        <form method="post" action="{% url 'idea:delete' idea.id %}" style="display: inline;"
+              onsubmit="return confirm('정말 삭제하시겠습니까?');">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">삭제</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+function toggleStar(ideaId, button) {
+    const csrftoken = getCookie('csrftoken');
+
+    fetch(`/idea/${ideaId}/toggle_star/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': csrftoken,
+            'Content-Type': 'application/x-www-form-urlencoded',
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        const starIcon = button.querySelector('.star-icon');
+        const starCountElement = document.querySelector('.star-count');
+
+        if (data.is_starred) {
+            button.classList.add('starred');
+            starIcon.textContent = '★ 찜한 아이디어';
+        } else {
+            button.classList.remove('starred');
+            starIcon.textContent = '☆ 찜하기';
+        }
+
+        starCountElement.textContent = data.star_count;
+    })
+    .catch(error => console.error('Error:', error));
+}
+</script>
+{% endblock %}
